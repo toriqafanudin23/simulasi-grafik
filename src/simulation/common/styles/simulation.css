@@ -1,0 +1,999 @@
+/* Kit UI simulasi (gaya GeoGebra). Dipakai semua simulasi; prefix: sim-
+   Urutan: (1) ponsel lanskap = dasar, (2) desktop/tablet,
+   (3) potret, (4) layar penuh.
+   Panel : grafik = 1 : 2. Gaya khusus satu simulasi JANGAN ditaruh di sini;
+   beri warna lewat variabel --sim-accent atau props. */
+
+.sim,
+.sim *,
+.sim *::before,
+.sim *::after {
+  box-sizing: border-box;
+}
+
+.sim {
+  --sim-primary: #232329;
+  --sim-primary-dark: #232329;
+  --sim-primary-soft: #ececf0;
+  --sim-text: #232329;
+  --sim-muted: #6c6c78;
+  --sim-border: #d8d8de;
+  --sim-surface: #ffffff;
+  --sim-surface-alt: #f5f5f8;
+  --sim-accent: var(--sim-primary);
+
+  --sim-bar-h: 36px;
+  --sim-btn: 30px;
+  --sim-fab: 32px;
+  --sim-track: 3px;
+  --sim-thumb: 14px;
+  --sim-step: 22px;
+  --sim-radius: 2px;
+  --sim-shadow: 0 1px 4px rgba(0, 0, 0, 0.22);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: min(100dvh, 460px);
+  overflow: hidden;
+  border: 1px solid var(--sim-border);
+  background: var(--sim-surface);
+  color: var(--sim-text);
+  font-family: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 12px;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sim button {
+  font: inherit;
+  color: inherit;
+  touch-action: manipulation;
+}
+
+.sim button:focus-visible,
+.sim input:focus-visible {
+  outline: 2px solid var(--sim-text);
+  outline-offset: 2px;
+}
+
+.sim .katex {
+  font-size: 1.08em;
+}
+
+.sim .katex-display {
+  margin: 0;
+}
+
+/* ───────── Bilah atas ───────── */
+
+.sim-bar {
+  position: relative;
+  z-index: 6;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 2px;
+  height: var(--sim-bar-h);
+  padding: 0 4px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--sim-border);
+  background: var(--sim-surface);
+  scrollbar-width: none;
+}
+
+.sim-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.sim-bar__sep {
+  flex: 0 0 auto;
+  width: 1px;
+  height: 18px;
+  margin: 0 4px;
+  background: var(--sim-border);
+}
+
+.sim-bar__spacer {
+  flex: 1 1 auto;
+}
+
+.sim-btn {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: var(--sim-btn);
+  height: var(--sim-btn);
+  padding: 0 5px;
+  border: 0;
+  border-radius: var(--sim-radius);
+  background: transparent;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.sim-btn:hover {
+  background: var(--sim-surface-alt);
+}
+
+.sim-btn[aria-pressed="true"],
+.sim-btn[aria-expanded="true"] {
+  background: var(--sim-primary-soft);
+  color: var(--sim-primary);
+}
+
+.sim-btn__label {
+  display: none;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ───────── Area utama: panel 1 : grafik 2 ───────── */
+
+.sim-main {
+  position: relative;
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  min-height: 0;
+}
+
+.sim.is-panel-closed .sim-main {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.sim.is-panel-closed .sim-panel {
+  display: none;
+}
+
+/* ───────── Panel ───────── */
+
+.sim-panel {
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-right: 1px solid var(--sim-border);
+  background: var(--sim-surface);
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.sim-section {
+  padding: 5px 8px 7px;
+}
+
+.sim-section + .sim-section {
+  border-top: 1px solid var(--sim-border);
+}
+
+.sim-section--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  border-bottom: 1px solid var(--sim-border);
+  background: var(--sim-surface);
+}
+
+.sim-section__title {
+  margin: 0 0 2px;
+  color: var(--sim-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ───────── Baris aljabar ───────── */
+
+.sim-rows {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sim-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 28px;
+  border-bottom: 1px solid #efeff3;
+}
+
+.sim-row:last-child {
+  border-bottom: 0;
+}
+
+.sim-row__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 2px 0;
+  overflow: hidden;
+  white-space: normal;
+}
+
+/* Titik warna: terisi = tampil, kosong = disembunyikan */
+.sim-dot {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.sim-dot > span {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--sim-accent);
+  border-radius: var(--sim-radius);
+  background: var(--sim-accent);
+}
+
+.sim-dot[aria-pressed="false"] > span {
+  background: transparent;
+}
+
+.sim-dot--empty {
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ───────── Slider ───────── */
+
+/* Ponsel: satu baris  [label] − ──●── + */
+.sim-slider {
+  display: grid;
+  grid-template-columns: 54px var(--sim-step) minmax(0, 1fr) var(--sim-step);
+  align-items: center;
+  column-gap: 4px;
+}
+
+.sim-slider__label {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  overflow: hidden;
+  color: var(--sim-accent);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.sim-slider__hint {
+  display: none;
+  color: var(--sim-muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.sim-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--sim-step);
+  height: var(--sim-step);
+  padding: 0;
+  border: 1px solid #b9b9c2;
+  border-radius: var(--sim-radius);
+  background: #fff;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.sim-step:hover:not(:disabled) {
+  border-color: var(--sim-accent);
+  background: var(--sim-surface-alt);
+}
+
+.sim-step:active:not(:disabled) {
+  background: var(--sim-primary-soft);
+}
+
+.sim-step:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Area sentuh 28px, tampilan visual hanya 3px */
+.sim-range {
+  --sim-fill: 50%;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 28px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: pan-y;
+}
+
+.sim-range::-webkit-slider-runnable-track {
+  height: var(--sim-track);
+  border-radius: var(--sim-radius);
+  background: linear-gradient(
+    to right,
+    var(--sim-accent) 0,
+    var(--sim-accent) var(--sim-fill),
+    #d3d3da var(--sim-fill),
+    #d3d3da 100%
+  );
+}
+
+.sim-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--sim-thumb);
+  height: var(--sim-thumb);
+  margin-top: calc((var(--sim-track) - var(--sim-thumb)) / 2);
+  border: 2px solid #fff;
+  border-radius: var(--sim-radius);
+  background: var(--sim-accent);
+  box-shadow: 0 0 0 1px rgba(35, 35, 41, 0.3);
+}
+
+.sim-range::-moz-range-track {
+  height: var(--sim-track);
+  border-radius: var(--sim-radius);
+  background: #d3d3da;
+}
+
+.sim-range::-moz-range-progress {
+  height: var(--sim-track);
+  border-radius: var(--sim-radius);
+  background: var(--sim-accent);
+}
+
+.sim-range::-moz-range-thumb {
+  width: var(--sim-thumb);
+  height: var(--sim-thumb);
+  border: 2px solid #fff;
+  border-radius: var(--sim-radius);
+  background: var(--sim-accent);
+  box-shadow: 0 0 0 1px rgba(35, 35, 41, 0.3);
+}
+
+.sim-range:focus-visible {
+  outline: none;
+}
+
+.sim-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 2px var(--sim-accent);
+}
+
+.sim-range:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 2px var(--sim-accent);
+}
+
+@media (pointer: coarse) {
+  .sim {
+    --sim-step: 26px;
+  }
+}
+
+/* ───────── Grafik ───────── */
+
+.sim-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  background: #fff;
+}
+
+/* Selektor 2 kelas agar mengalahkan .jxgbox bawaan JSXGraph */
+.sim .sim-board {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+  cursor: grab;
+  touch-action: none;
+}
+
+.sim .sim-board:active {
+  cursor: grabbing;
+}
+
+.sim-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  max-width: calc(100% - 60px);
+  margin: 0;
+  padding: 3px 9px;
+  overflow: hidden;
+  border-radius: var(--sim-radius);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--sim-shadow);
+  font-size: 14px;
+  pointer-events: none;
+  white-space: normal;
+}
+
+/* Tombol kotak melayang di pojok kanan bawah grafik */
+.sim-fabs {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 3;
+  display: grid;
+  gap: 6px;
+}
+
+.sim-fab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--sim-fab);
+  height: var(--sim-fab);
+  padding: 0;
+  border: 1px solid var(--sim-border);
+  border-radius: var(--sim-radius);
+  background: #fff;
+  box-shadow: var(--sim-shadow);
+  cursor: pointer;
+}
+
+.sim-fab:hover,
+.sim-fab[aria-pressed="true"] {
+  background: var(--sim-primary-soft);
+  color: var(--sim-primary);
+}
+
+/* ───────── Popover pengaturan ───────── */
+
+.sim-popover {
+  position: absolute;
+  top: calc(var(--sim-bar-h) + 4px);
+  right: 6px;
+  z-index: 8;
+  width: min(280px, calc(100% - 12px));
+  max-height: calc(100% - var(--sim-bar-h) - 12px);
+  overflow-y: auto;
+  border: 1px solid var(--sim-border);
+  border-radius: var(--sim-radius);
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.sim-popover .sim-slider {
+  grid-template-columns: var(--sim-step) minmax(0, 1fr) var(--sim-step);
+  row-gap: 0;
+  padding: 2px 0 4px;
+}
+
+.sim-popover .sim-slider__label {
+  grid-column: 1 / -1;
+  font-size: 12px;
+}
+
+.sim-text-btn {
+  width: 100%;
+  height: 30px;
+  margin-top: 6px;
+  border: 1px solid var(--sim-border);
+  border-radius: var(--sim-radius);
+  background: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sim-text-btn:hover {
+  border-color: var(--sim-primary);
+  background: var(--sim-primary-soft);
+  color: var(--sim-primary);
+}
+
+/* ───────── Banner & catatan ───────── */
+
+.sim-rotate {
+  display: none;
+  margin: 0;
+  padding: 6px 10px;
+  background: var(--sim-primary-soft);
+  color: var(--sim-primary-dark);
+  font-size: 11px;
+}
+
+.sim-notes {
+  display: none;
+}
+
+/* ───────── Layar sangat pendek (ponsel lanskap kecil) ───────── */
+
+@media (orientation: landscape) and (max-height: 380px) {
+  .sim {
+    --sim-bar-h: 32px;
+    --sim-btn: 28px;
+    --sim-fab: 30px;
+  }
+
+  .sim-section {
+    padding: 4px 8px 5px;
+  }
+
+  .sim-row {
+    min-height: 26px;
+  }
+
+  .sim-range {
+    height: 24px;
+  }
+}
+
+/* ───────── Desktop & tablet lanskap ───────── */
+
+@media (min-width: 900px) and (min-height: 541px) {
+  .sim {
+    --sim-bar-h: 44px;
+    --sim-btn: 34px;
+    --sim-fab: 38px;
+    --sim-track: 4px;
+    --sim-thumb: 16px;
+    --sim-step: 28px;
+    height: auto;
+    font-size: 13px;
+  }
+
+  .sim-bar {
+    gap: 4px;
+    padding: 0 8px;
+  }
+
+  .sim-btn {
+    padding: 0 9px;
+  }
+
+  .sim-btn__label {
+    display: inline;
+  }
+
+  .sim-main {
+    flex: none;
+    height: clamp(460px, 70vh, 700px);
+  }
+
+  .sim-section {
+    padding: 10px 14px 12px;
+  }
+
+  .sim-section__title {
+    margin-bottom: 6px;
+    font-size: 11px;
+  }
+
+  .sim-row {
+    min-height: 36px;
+  }
+
+  /* Dua baris: label di atas, − slider + di bawah */
+  .sim-slider {
+    grid-template-columns: var(--sim-step) minmax(0, 1fr) var(--sim-step);
+    row-gap: 2px;
+    padding: 4px 0;
+  }
+
+  .sim-slider__label {
+    grid-column: 1 / -1;
+    font-size: 18px;
+  }
+
+  .sim-slider__hint {
+    display: inline;
+  }
+
+  .sim-range {
+    height: 30px;
+  }
+
+  .sim-overlay {
+    top: 12px;
+    left: 12px;
+    padding: 5px 13px;
+    font-size: clamp(18px, 1.8vw, 26px);
+  }
+
+  .sim-fabs {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .sim-popover {
+    right: 8px;
+  }
+
+  .sim-notes {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding: 12px 16px;
+    list-style: none;
+    border-top: 1px solid var(--sim-border);
+    background: var(--sim-surface-alt);
+    color: var(--sim-muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .sim-notes > * {
+    padding-left: 10px;
+    border-left: 3px solid var(--sim-border);
+  }
+}
+
+/* ───────── Potret: grafik di atas, panel di bawah ───────── */
+
+@media (orientation: portrait) and (max-width: 899px) {
+  .sim {
+    height: auto;
+  }
+
+  .sim-rotate {
+    display: block;
+  }
+
+  .sim-main {
+    flex: none;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sim-stage {
+    order: -1;
+    height: clamp(260px, 50dvh, 440px);
+  }
+
+  .sim-panel {
+    overflow: visible;
+    border-top: 1px solid var(--sim-border);
+    border-right: 0;
+  }
+
+  .sim-section--sticky {
+    position: static;
+  }
+
+  .sim-slider {
+    grid-template-columns: 64px var(--sim-step) minmax(0, 1fr) var(--sim-step);
+  }
+}
+
+/* ───────── Layar penuh: grafik 100%, panel mengambang ───────── */
+
+.sim.is-fs {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  width: 100vw;
+  height: 100dvh;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+    env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  border: 0;
+  border-radius: 0;
+}
+
+.sim.is-fs .sim-main {
+  flex: 1 1 auto;
+  height: auto;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.sim.is-fs .sim-stage {
+  height: auto;
+  order: 0;
+}
+
+.sim.is-fs .sim-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+  width: min(300px, 62%);
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-right: 1px solid var(--sim-border);
+  border-top: 0;
+  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.18);
+}
+
+.sim.is-fs .sim-section--sticky {
+  position: sticky;
+}
+
+.sim.is-fs .sim-notes {
+  display: none;
+}
+
+@media (min-width: 900px) and (min-height: 541px) {
+  .sim.is-fs .sim-panel {
+    width: min(360px, 40%);
+  }
+}
+
+/* ───────── Pilihan segmen (mis. pilih fungsi) ───────── */
+
+.sim-seg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.sim-seg__btn {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid var(--sim-border);
+  border-radius: var(--sim-radius);
+  background: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.sim-seg__btn:hover {
+  border-color: var(--sim-primary);
+}
+
+.sim-seg__btn[aria-checked="true"] {
+  border-color: var(--sim-primary);
+  background: var(--sim-primary-soft);
+  color: var(--sim-primary);
+}
+
+.sim-text-btn[aria-pressed="true"] {
+  border-color: var(--sim-primary);
+  background: var(--sim-primary-soft);
+  color: var(--sim-primary);
+}
+
+/* ───────── Tabel ───────── */
+
+.sim-table-wrap {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.sim-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  text-align: right;
+}
+
+.sim-table caption {
+  padding-bottom: 4px;
+  color: var(--sim-muted);
+  font-size: 11px;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.sim-table th,
+.sim-table td {
+  padding: 3px 6px;
+  border-bottom: 1px solid #efeff3;
+  font-weight: 400;
+}
+
+.sim-table thead th {
+  color: var(--sim-muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.sim-table tbody th {
+  color: var(--sim-text);
+  font-weight: 600;
+  text-align: left;
+}
+
+.sim-table__limit th,
+.sim-table__limit td {
+  border-bottom: 0;
+  background: var(--sim-primary-soft);
+  color: var(--sim-primary-dark);
+  font-weight: 700;
+}
+
+@media (min-width: 900px) and (min-height: 541px) {
+  .sim-seg__btn {
+    height: 32px;
+    font-size: 13px;
+  }
+
+  .sim-table,
+  .sim-table caption {
+    font-size: 13px;
+  }
+
+  .sim-table th,
+  .sim-table td {
+    padding: 5px 8px;
+  }
+}
+
+/* ===== Penggambar grafik (umum, dapat dipakai simulasi lain) ===== */
+.sim-slot { display: flex; align-items: center; gap: 4px; padding: 2px 0; }
+.sim-input {
+  flex: 1; min-width: 0; height: 28px; padding: 0 8px;
+  font: 12px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: inherit; background: #fff;
+  border: 1px solid var(--sim-border);
+  border-radius: var(--sim-radius);
+}
+.sim .sim-input:hover { border-color: #9a9aa5; }
+.sim .sim-input:focus,
+.sim .sim-input:focus-visible { outline: none; border-color: var(--sim-text); }
+.sim .sim-input[aria-invalid="true"] { border-color: #b3261e; }
+.sim-status { margin: 2px 0 4px; font-size: 11px; line-height: 1.35; color: #5b6770; white-space: normal; }
+.sim-status.is-error { color: #b3261e; }
+.sim-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.sim-chip {
+  padding: 3px 8px; font-size: 11px; color: inherit; background: #fff;
+  border: 1px solid rgba(0,0,0,.2); border-radius: var(--sim-radius); cursor: pointer;
+}
+.sim-chip[aria-pressed="true"] { background: var(--sim-primary-soft); border-color: var(--sim-text); }
+.sim-icon-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; padding: 0; color: inherit; background: transparent;
+  border: 1px solid transparent; border-radius: var(--sim-radius); cursor: pointer;
+}
+.sim-icon-btn:hover { background: rgba(0,0,0,.06); }
+.sim-subhead { margin: 6px 0 2px; font-size: 11px; font-weight: 700; letter-spacing: .02em; color: #5b6770; }
+.sim-link { padding: 0; font-size: 11px; color: var(--sim-accent, #183e54); background: none; border: 0; text-decoration: underline; cursor: pointer; }
+.sim-muted { color: #5b6770; }
+.sim-hint { margin: 2px 0; font-size: 11px; line-height: 1.35; color: #5b6770; }
+.sim-result { padding: 6px 0; border-top: 1px solid rgba(0,0,0,.08); }
+.sim-result__head { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
+.sim-result__note { font-size: 11px; color: #5b6770; }
+.sim-points { display: flex; flex-wrap: wrap; gap: 2px 8px; font-size: 12px; }
+.sim-swatch { display: inline-block; width: 10px; height: 10px; border-radius: var(--sim-radius); flex: none; }
+.sim-empty {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  padding: 16px; text-align: center; font-size: 13px; color: #5b6770; pointer-events: none;
+}
+.sim-trace {
+  position: absolute; left: 8px; bottom: 8px; padding: 4px 8px; font-size: 11px;
+  background: rgba(255,255,255,.92); border: 1px solid rgba(0,0,0,.15); border-radius: var(--sim-radius); pointer-events: none;
+}
+.sim-toast {
+  position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%);
+  padding: 6px 12px; font-size: 12px; color: #fff; background: rgba(20,28,34,.92);
+  border-radius: var(--sim-radius); pointer-events: none; white-space: nowrap;
+}
+.sim-guide summary { cursor: pointer; font-size: 12px; font-weight: 600; }
+.sim-guide code { padding: 0 3px; font-size: 11px; background: rgba(0,0,0,.06); border-radius: var(--sim-radius); }
+.sim-table--left { text-align: left; }
+.sim-table--left th, .sim-table--left td { text-align: left; }
+.sim-text-btn--icon { display: flex; align-items: center; justify-content: center; gap: 6px; }
+.sim-seg__btn[aria-pressed="true"] { background: var(--sim-accent, #183e54); color: #fff; }
+.sim .sim-board:focus-visible { outline: 2px solid var(--sim-accent, #183e54); outline-offset: -2px; }
+@media (min-width: 900px) and (min-height: 541px) {
+  .sim-input { height: 32px; font-size: 13px; }
+  .sim-status, .sim-hint, .sim-result__note, .sim-trace { font-size: 12px; }
+  .sim-chip { font-size: 12px; }
+}
+
+/* ===== Dua lingkaran & garis singgung (umum, dapat dipakai simulasi lain) ===== */
+.sim-seg__btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.sim-seg__btn:disabled:hover { border-color: var(--sim-border); }
+.sim-overlay__sub { margin-left: 10px; color: var(--sim-muted); font-size: 0.6em; font-weight: 600; }
+.sim-callout {
+  margin: 6px 0 0; padding: 6px 8px; font-size: 12px; line-height: 1.55; white-space: normal;
+  border: 1px solid var(--sim-border); border-radius: 0;
+  background: var(--sim-surface-alt);
+}
+.sim-wrap { display: block; padding: 3px 0; white-space: normal; line-height: 1.4; }
+.sim-text-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.sim-text-btn:disabled:hover { border-color: var(--sim-border); background: #fff; color: inherit; }
+@media (min-width: 900px) and (min-height: 541px) {
+  .sim-callout { font-size: 13px; padding: 8px 10px; }
+}
+
+/* Papan JSXGraph: pastikan SVG mengisi seluruh kontainer (termasuk layar penuh) */
+.sim .sim-board > svg { display: block; }
+.sim-stage { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sim * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ===== Irisan kerucut (umum: pilihan segmen berwarna & baris tombol) ===== */
+.sim-seg--kinds {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.sim-seg--kinds .sim-seg__btn:hover {
+  border-color: var(--sim-accent);
+}
+.sim-seg--kinds .sim-seg__btn[aria-checked="true"] {
+  border-color: var(--sim-accent);
+  background: var(--sim-accent);
+  color: #fff;
+}
+.sim-btn-row {
+  display: flex;
+  gap: 6px;
+}
+.sim-btn-row .sim-text-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0 4px;
+}
+@media (orientation: landscape) and (max-height: 380px) {
+  .sim-seg--kinds {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .sim-seg--kinds .sim-seg__btn {
+    padding: 0 2px;
+    font-size: 11px;
+  }
+}
+
+/* Math inline: sembunyikan scrollbar/panah saja. JANGAN ubah overflow di dalam
+   .katex (MathML tersembunyi dan ekor akar bergantung pada overflow: hidden). */
+.sim-overlay,
+.sim-overlay *,
+.sim-row__body,
+.sim-row__body *,
+.sim-notes *,
+.sim-callout *,
+.sim-slider__label * {
+  scrollbar-width: none;
+}
+.sim-overlay::-webkit-scrollbar,
+.sim-overlay *::-webkit-scrollbar,
+.sim-row__body::-webkit-scrollbar,
+.sim-row__body *::-webkit-scrollbar,
+.sim-notes *::-webkit-scrollbar,
+.sim-callout *::-webkit-scrollbar,
+.sim-slider__label *::-webkit-scrollbar {
+  display: none;
+}
+
+/* ───────── Umpan balik tombol Bagikan ───────── */
+
+.sim-share-note {
+  position: absolute;
+  top: calc(var(--sim-bar-h) + 6px);
+  right: 8px;
+  z-index: 9;
+  max-width: calc(100% - 16px);
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #0f172a;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
+}
+
+.sim-share-note:empty {
+  display: none;
+}

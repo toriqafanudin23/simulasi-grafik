@@ -1,0 +1,65 @@
+.gg{display:flex;flex-direction:column;height:100%}
+.gg-top{display:flex;align-items:center;gap:6px;background:var(--pu);color:#fff;padding:0 12px;height:48px;flex:none}
+.gg-logo{font-weight:700;font-size:18px;margin-right:14px;letter-spacing:.3px}
+.gg-tab{background:none;border:0;color:#e4e1ff;padding:0 14px;height:48px;display:flex;align-items:center;gap:6px;border-bottom:3px solid transparent}
+.gg-tab:hover{background:var(--pu2)}.gg-tab.on{color:#fff;border-color:#fff;background:var(--pu2)}
+.gg-body{flex:1;min-height:0;display:flex}
+.gg-alg{width:320px;flex:none;border-right:1px solid var(--bd);display:flex;flex-direction:column;background:#fff}
+.gg-alg h3{margin:0;padding:10px 14px;font-size:14px;background:var(--bg);border-bottom:1px solid var(--bd)}
+.gg-rows{flex:1;overflow:auto}
+.gg-row{display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid #eee}
+.gg-dot{width:20px;height:20px;border-radius:50%;border:2px solid;flex:none;padding:0}
+.gg-row input,.gg-new input{flex:1;border:0;outline:0;font-size:15px;padding:6px 2px;background:transparent;min-width:0}
+.gg-row .x{border:0;background:none;color:#999}.gg-row .x:hover{color:#c00}
+.gg-new{display:flex;padding:6px 10px;border-top:1px solid var(--bd)}
+.gg-new input{border-bottom:2px solid var(--pu)}
+.gg-err{color:#c00;font-size:12px;padding:0 14px 6px}
+.gg-main{flex:1;position:relative;display:flex;flex-direction:column;min-width:0}
+.gg-tools{display:flex;gap:4px;padding:6px 8px;background:var(--bg);border-bottom:1px solid var(--bd);flex-wrap:wrap}
+.gg-tool{border:1px solid transparent;background:none;border-radius:6px;padding:6px 10px;display:flex;align-items:center;gap:6px;font-size:13px}
+.gg-tool:hover{background:#e8e6fb}.gg-tool.on{background:#d9d5fa;border-color:var(--pu)}
+.gg-tools .sp{flex:1}
+.gg-hint{position:absolute;left:12px;bottom:10px;background:#fffd;padding:4px 10px;border-radius:6px;font-size:12px}
+.gg-board{flex:1;min-height:0;position:relative}
+.gg-board .sim-board{position:absolute;inset:0;width:100%;height:100%;border:0}
+.gg-gal{flex:1;overflow:auto;padding:28px;background:var(--bg)}
+.gg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin-top:16px}
+.gg-card{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:16px;text-align:left}
+.gg-card:hover{box-shadow:0 4px 14px #6557d233;border-color:var(--pu)}
+.gg-card b{display:block;margin-bottom:6px}.gg-card span{font-size:13px;color:#555}
+.gg-sim{flex:1;min-height:0;display:flex;flex-direction:column}.gg-sim .sim{flex:1;min-height:0}
+.gg-back{align-self:flex-start;margin:8px;border:1px solid var(--bd);background:#fff;border-radius:8px;padding:6px 12px}
+@media(max-width:700px){.gg-body{flex-direction:column}.gg-alg{width:100%;height:38%;border-right:0;border-bottom:1px solid var(--bd)}}
+
+.gg-top{overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:5;box-shadow:0 1px 4px #0003}
+.gg-top::-webkit-scrollbar{display:none}
+.gg-logo{display:flex;align-items:center;gap:8px;flex:none}
+.gg-mark{font-style:normal;background:#fff;color:var(--pu);width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-weight:800}
+.gg-tab{white-space:nowrap;flex:none}
+.gg-row input[type=range]{flex:1;accent-color:var(--pu)}
+.gg-tools{overflow-x:auto}.gg-tool{flex:none}
+@media(max-width:700px){.gg-logo b,.gg-tab span{display:none}.gg-tab{padding:0 12px}.gg-top{padding:0 6px}}
+
+.gg-gal{padding:0;background:#fff}
+.gg-hero{background:linear-gradient(180deg,#f0eeff,#fff);padding:32px 28px 12px;border-bottom:1px solid var(--bd)}
+.gg-hero h1{margin:0 0 14px;font-size:26px;font-weight:600}
+.gg-search{display:flex;align-items:center;gap:8px;max-width:520px;background:#fff;border:1px solid #bbb;border-radius:24px;padding:8px 16px}
+.gg-search:focus-within{border-color:var(--pu);box-shadow:0 0 0 2px #6557d233}
+.gg-search input{flex:1;border:0;outline:0;font-size:15px;background:none}
+.gg-chips{display:flex;gap:8px;margin:14px 0 6px;flex-wrap:wrap}
+.gg-chips button{border:1px solid #bbb;background:#fff;border-radius:16px;padding:5px 14px;font-size:13px}
+.gg-chips button:hover{border-color:var(--pu)}.gg-chips .on{background:var(--pu);border-color:var(--pu);color:#fff}
+.gg-gal .gg-grid{padding:20px 28px 32px;margin:0;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.gg-card{padding:0;overflow:hidden;border-radius:8px;display:flex;flex-direction:column;transition:box-shadow .15s}
+.gg-thumb{position:relative;height:130px;display:grid;place-items:center;overflow:hidden}
+.gg-thumb svg{position:absolute;inset:0;width:100%;height:100%}
+.gg-thumb :last-child{position:relative}
+.gg-meta{padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.gg-meta b{margin:0;font-size:15px}.gg-meta small{color:#888;font-size:12px;margin-top:4px}
+.gg-crumb{display:flex;align-items:center;gap:12px;padding:10px 20px;background:#fff;border-bottom:1px solid var(--bd);flex:none}
+.gg-crumb h2{margin:0;font-size:18px;font-weight:600}.gg-crumb small{color:#777}
+.gg-crumb button{border:0;background:none;border-radius:50%;width:36px;height:36px;display:grid;place-items:center}
+.gg-crumb button:hover{background:#eee}
+.gg-frame{flex:1;min-height:0;margin:12px 20px 16px;border:1px solid var(--bd);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.gg-frame .sim{flex:1;min-height:0}
+@media(max-width:700px){.gg-frame{margin:0;border-radius:0;border-width:1px 0}.gg-hero{padding:20px 14px 8px}.gg-gal .gg-grid{padding:14px}}

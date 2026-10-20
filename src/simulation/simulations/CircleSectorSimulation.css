@@ -1,0 +1,95 @@
+/* Gaya khusus simulasi lingkaran. Prefix: sim-cir-
+   Kit umum tetap di simulation.css; warna lewat variabel --sim-accent. */
+
+/* Pilihan materi: label panjang boleh turun baris */
+.sim-cir-modes .sim-seg__btn {
+  height: auto;
+  min-height: 30px;
+  padding: 4px 6px;
+  line-height: 1.2;
+  white-space: normal;
+}
+
+/* Kartu definisi bagian lingkaran */
+.sim-cir-def {
+  margin: 6px 0 0;
+  padding: 6px 8px;
+  border: 1px solid var(--sim-border);
+  border-left: 4px solid var(--sim-accent, var(--sim-primary));
+  background: var(--sim-surface-alt);
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: normal;
+}
+.sim-cir-def strong {
+  color: var(--sim-accent, inherit);
+}
+
+/* Batang perbandingan θ / 360° */
+.sim-cir-bar {
+  position: relative;
+  height: 14px;
+  margin: 4px 0 6px;
+  overflow: hidden;
+  border: 1px solid var(--sim-border);
+  border-radius: var(--sim-radius);
+  background: var(--sim-surface-alt);
+}
+.sim-cir-bar__fill {
+  display: block;
+  height: 100%;
+  background: var(--sim-accent, var(--sim-primary));
+  opacity: 0.85;
+}
+.sim-cir-bar__ticks {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent calc(25% - 1px),
+    rgba(0, 0, 0, 0.25) calc(25% - 1px),
+    rgba(0, 0, 0, 0.25) 25%
+  );
+  pointer-events: none;
+}
+.sim-cir-bar-caption {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 4px;
+  color: var(--sim-muted);
+  font-size: 10px;
+}
+
+/* Tombol aksi selebar panel */
+.sim-cir-actions {
+  display: grid;
+  gap: 6px;
+}
+.sim-cir-actions .sim-text-btn {
+  margin-top: 0;
+  height: 32px;
+}
+
+/* Kesimpulan besar (memotong / menyinggung / di luar) */
+.sim-cir-verdict {
+  margin: 6px 0 0;
+  padding: 8px 10px;
+  border: 1px solid var(--sim-accent, var(--sim-border));
+  border-left-width: 4px;
+  background: var(--sim-surface-alt);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: normal;
+}
+
+.sim-cir-step-label {
+  margin: 6px 0 3px;
+  color: var(--sim-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+.sim-cir-step-label:first-of-type {
+  margin-top: 0;
+}

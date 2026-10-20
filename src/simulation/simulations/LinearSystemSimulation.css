@@ -1,0 +1,168 @@
+/* Gaya khusus simulasi sistem linear. Prefix: sim-lin-
+   Kit umum tetap di simulation.css; warna lewat variabel --sim-accent. */
+
+.sim-lin-card {
+  padding: 6px 0 8px;
+  border-bottom: 1px solid #efeff3;
+}
+.sim-lin-card:last-of-type {
+  border-bottom: 0;
+}
+
+.sim-lin-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  margin-bottom: 4px;
+}
+.sim-lin-swatch {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--sim-accent, #232329);
+}
+.sim-lin-title {
+  flex: none;
+  font-size: 12px;
+  font-weight: 700;
+}
+.sim-lin-preview {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--sim-muted);
+  white-space: nowrap;
+}
+
+/* Bentuk:  [a] x + [b] y  [op]  [c] */
+.sim-lin-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 4px 5px;
+}
+.sim-lin-sym {
+  flex: none;
+  align-self: flex-start;
+  height: 28px;
+  line-height: 28px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sim-lin-coef {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 2px;
+  width: 54px;
+}
+.sim-lin-coef--wide {
+  width: 64px;
+}
+.sim-lin-num {
+  flex: none;
+  width: 100%;
+  text-align: center;
+}
+.sim-lin-bumps {
+  display: flex;
+  gap: 2px;
+}
+.sim-lin-bump {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--sim-border);
+  border-radius: var(--sim-radius);
+  background: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+.sim-lin-bump:hover {
+  border-color: var(--sim-accent, var(--sim-primary));
+  background: var(--sim-primary-soft);
+}
+.sim-lin-bump:active {
+  background: var(--sim-accent, var(--sim-primary));
+  color: #fff;
+}
+
+.sim-lin-op {
+  flex: none;
+  width: 52px;
+  height: 28px;
+  padding: 0 2px;
+  border: 1px solid var(--sim-border);
+  border-radius: var(--sim-radius);
+  background: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+}
+.sim-lin-op--fixed {
+  display: inline-block;
+  line-height: 26px;
+  cursor: default;
+  background: var(--sim-surface-alt);
+}
+
+.sim-lin-del {
+  flex: none;
+}
+
+/* Tombol "Tampilkan ..." */
+.sim-lin-show {
+  height: 36px;
+  margin-top: 0;
+  font-size: 13px;
+}
+.sim-lin-shows {
+  display: grid;
+  gap: 6px;
+}
+.sim-lin-show[aria-pressed="true"] {
+  border-color: var(--sim-accent, var(--sim-primary));
+  background: var(--sim-accent, var(--sim-primary));
+  color: #fff;
+}
+.sim-lin-show[aria-pressed="true"]:hover {
+  background: var(--sim-accent, var(--sim-primary));
+  color: #fff;
+}
+
+.sim-lin-add {
+  height: 32px;
+  margin-top: 6px;
+}
+
+.sim-lin-step-note {
+  margin: 4px 0 0;
+}
+
+.sim-lin-objective {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 4px 5px;
+  margin-bottom: 6px;
+}
+
+@media (pointer: coarse) {
+  .sim-lin-bump {
+    height: 28px;
+  }
+  .sim-lin-coef {
+    width: 58px;
+  }
+  .sim-lin-coef--wide {
+    width: 68px;
+  }
+}

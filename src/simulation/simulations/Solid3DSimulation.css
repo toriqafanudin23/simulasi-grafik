@@ -1,0 +1,13 @@
+.s3d{padding:12px;display:flex;flex-direction:column;gap:10px;font-size:14px}
+.s3d h4{margin:6px 0 0;font-size:13px;color:#555}
+.s3d-shapes{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.s3d-shapes button,.s3d-seg button{border:1px solid #ccc;background:#fff;border-radius:8px;padding:6px;font-size:13px}
+.s3d-shapes .on,.s3d-seg .on{background:#6557d2;border-color:#6557d2;color:#fff}
+.s3d-seg{display:flex;gap:6px}.s3d-seg button{flex:1}
+.s3d label{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px}
+.s3d label input{grid-column:1/-1;accent-color:#6557d2}
+.s3d select{padding:6px;border-radius:6px;border:1px solid #ccc}
+.s3d-res{background:#f5f5fa;border-radius:8px;padding:10px;line-height:1.6}
+.s3d-res b{color:#6557d2}
+.s3d-svg{width:100%;height:100%;display:block;touch-action:none;cursor:grab;background:#fff}
+.s3d-note{color:#777;font-size:13px}
